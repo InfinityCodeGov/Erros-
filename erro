@@ -1,39 +1,18 @@
-A versão do Google Services (`com.google.gms:google-services`) que você está usando (4.4.2) não deve interferir diretamente na configuração do plugin `com.android.application` no seu projeto, já que eles são componentes separados:
-
-1. **Plugin Android (`com.android.application`)**: Este plugin é responsável por definir como seu projeto Android é construído e empacotado. Ele lida com a configuração do projeto Android em geral.
-
-2. **Google Services Plugin (`com.google.gms:google-services`)**: Este plugin é usado para integrar os serviços do Google, como Firebase, no seu aplicativo Android. Ele geralmente é aplicado no final do arquivo `build.gradle` e configura automaticamente as dependências necessárias para os serviços do Google.
-
-### Como Usar Ambos no Projeto
-
-Para garantir que tudo funcione corretamente juntos, siga estas diretrizes:
-
-#### `build.gradle.kts` do Módulo
-
-Além do plugin Android, você precisará aplicar o plugin Google Services corretamente no final do arquivo:
-
-```kotlin
-plugins {
-    id("com.android.application") version "8.0.0" apply false
-    id("com.google.gms.google-services") version "4.4.2" apply false // Certifique-se de aplicar corretamente
+pluginManagement {
+    repositories {
+        google() // Adicionado para garantir que o plugin Android seja encontrado
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
 
-android {
-    // Configurações do Android aqui
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
-dependencies {
-    // Suas dependências aqui
-}
-
-// No final do arquivo, aplique o plugin do Google Services
-apply(plugin = "com.google.gms.google-services")
-```
-
-### Considerações
-
-- **Compatibilidade de Versões**: Certifique-se de que não há incompatibilidades entre a versão do plugin Android e a versão do Google Services. Em geral, as versões mais recentes do plugin Android são compatíveis com várias versões do Google Services.
-  
-- **Ordem de Aplicação**: O plugin `com.google.gms.google-services` deve ser aplicado após todas as outras dependências e configurações de plugins, geralmente no final do arquivo `build.gradle.kts`.
-
-Seguindo essas orientações, você deve conseguir usar ambos os plugins sem problemas de compatibilidade ou interferência. Se surgirem erros, verifique as mensagens específicas para identificar a origem do problema.
+rootProject.name = "StudyTask"
+include(":app")
